@@ -57,10 +57,11 @@ class RulesMapper
         return $this->int($_);
     }
 
-    public function array(Type $_, $params)
+    public function array(Type $prevType, $params)
     {
         if (count($params)) {
             $object = (new \Dedoc\Scramble\Support\Generator\Types\ObjectType)
+                ->addProperties($prevType)
                 ->setRequired($params);
 
             foreach ($params as $param) {
@@ -70,7 +71,7 @@ class RulesMapper
             return $object;
         }
 
-        return new ArrayType;
+        return (new ArrayType)->addProperties($prevType);
     }
 
     public function email(Type $type)
